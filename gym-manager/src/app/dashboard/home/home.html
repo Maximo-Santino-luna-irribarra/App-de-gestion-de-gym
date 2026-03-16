@@ -1,0 +1,118 @@
+<div class="flex h-screen bg-[#0f0f0f] font-sans">
+
+    <!-- SIDEBAR -->
+    <aside class="w-60 min-w-60 bg-[#141414] border-r border-[#222] flex flex-col p-6">
+        <h1 class="text-2xl font-black tracking-widest text-[#e5ff00] mb-6">FITNESS CLUB</h1>
+
+        <!-- Search -->
+        <div class="flex items-center gap-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-2 mb-3">
+        <span class="text-[#444] text-sm">⌕</span>
+        <input type="text" placeholder="Buscar miembro..."
+            class="bg-transparent outline-none text-[#aaa] text-xs w-full placeholder-[#444]" />
+        </div>
+
+        <!-- Añadir -->
+        <button class="w-full bg-[#e5ff00] text-black text-sm font-medium rounded-lg py-2.5 mb-6 hover:opacity-85 transition-opacity">
+        ＋ Añadir miembro
+        </button>
+
+        <!-- Nav -->
+        <p class="text-[10px] text-[#333] tracking-widest mb-2">MENÚ</p>
+        <nav class="flex flex-col gap-0.5">
+        <a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#e5ff00] bg-[#1e1e1e] text-sm cursor-pointer">
+            <span class="w-1.5 h-1.5 rounded-full bg-current"></span> Inicio
+        </a>
+        <a routerLink="/miembros" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#666] text-sm hover:text-[#aaa] hover:bg-[#1a1a1a] cursor-pointer">
+            <span class="w-1.5 h-1.5 rounded-full bg-current"></span> Miembros
+        </a>
+        <a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#666] text-sm hover:text-[#aaa] hover:bg-[#1a1a1a] cursor-pointer">
+            <span class="w-1.5 h-1.5 rounded-full bg-current"></span> Estadísticas
+        </a>
+        <a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#666] text-sm hover:text-[#aaa] hover:bg-[#1a1a1a] cursor-pointer">
+            <span class="w-1.5 h-1.5 rounded-full bg-current"></span> Pagos
+        </a>
+        </nav>
+
+        <!-- User -->
+        <div class="mt-auto pt-4 border-t border-[#1e1e1e]">
+        <div class="flex items-center gap-2.5 p-2">
+            <div class="w-8 h-8 rounded-full bg-[#e5ff00] flex items-center justify-center text-xs font-medium text-black">AD</div>
+            <div>
+            <p class="text-sm text-[#aaa]">Admin</p>
+            <span class="text-[11px] text-[#444]">Administrador</span>
+            </div>
+        </div>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="flex-1 overflow-y-auto p-6">
+        <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg text-[#f0f0f0] font-medium">Resumen general</h2>
+        <span class="text-xs text-[#444]">Marzo 2026</span>
+        </div>
+
+        <!-- Cards -->
+        <div class="grid grid-cols-4 gap-3 mb-6">
+        <div class="bg-[#1a1a1a] border border-[#222] rounded-xl p-4">
+            <p class="text-[11px] text-[#555] tracking-wide mb-2">TOTAL MIEMBROS</p>
+            <p class="text-2xl font-medium text-[#e5ff00]">{{ stats.total }}</p>
+            <p class="text-[11px] text-green-400 mt-1">↑ 12 este mes</p>
+        </div>
+        <div class="bg-[#1a1a1a] border border-[#222] rounded-xl p-4">
+            <p class="text-[11px] text-[#555] tracking-wide mb-2">ACTIVOS</p>
+            <p class="text-2xl font-medium text-[#f0f0f0]">{{ stats.activos }}</p>
+            <p class="text-[11px] text-green-400 mt-1">↑ 83%</p>
+        </div>
+        <div class="bg-[#1a1a1a] border border-[#222] rounded-xl p-4">
+            <p class="text-[11px] text-[#555] tracking-wide mb-2">VENCIDOS</p>
+            <p class="text-2xl font-medium text-[#f0f0f0]">{{ stats.vencidos }}</p>
+            <p class="text-[11px] text-red-400 mt-1">↓ 16%</p>
+        </div>
+        <div class="bg-[#1a1a1a] border border-[#222] rounded-xl p-4">
+            <p class="text-[11px] text-[#555] tracking-wide mb-2">INGRESOS MES</p>
+            <p class="text-2xl font-medium text-[#f0f0f0]">{{ stats.ingresos }}</p>
+            <p class="text-[11px] text-green-400 mt-1">↑ 8%</p>
+        </div>
+        </div>
+
+        <!-- Chart + Recent -->
+        <p class="text-[11px] text-[#555] tracking-widest mb-3">ACTIVIDAD Y ÚLTIMOS REGISTROS</p>
+        <div class="grid grid-cols-2 gap-3">
+
+        <!-- Barras -->
+        <div class="bg-[#1a1a1a] border border-[#222] rounded-xl p-5">
+            <p class="text-xs text-[#555] mb-4">NUEVOS MIEMBROS — ÚLTIMOS 6 MESES</p>
+            <div class="flex items-end gap-2 h-24">
+            @for (b of barras; track b.mes) {
+                <div class="flex flex-col items-center gap-1 flex-1">
+                <div class="w-full rounded-t"
+                    [style.height.px]="b.alto"
+                    [class]="b.activo ? 'bg-[#e5ff00]' : 'bg-[#2a2a2a]'">
+                </div>
+                <span class="text-[9px] text-[#444]">{{ b.mes }}</span>
+                </div>
+            }
+            </div>
+        </div>
+
+        <!-- Últimos registros -->
+        <div class="bg-[#1a1a1a] border border-[#222] rounded-xl p-5">
+            <p class="text-xs text-[#555] mb-3">ÚLTIMOS REGISTROS</p>
+            @for (m of ultimos; track m.nombre) {
+            <div class="flex items-center justify-between py-2 border-b border-[#1e1e1e] last:border-0">
+                <div>
+                <p class="text-sm text-[#ccc]">{{ m.nombre }}</p>
+                <p class="text-[11px] text-[#444]">{{ m.fecha }}</p>
+                </div>
+                <span class="text-[10px] px-2 py-1 rounded-full"
+                [class]="m.estado === 'activo' ? 'bg-green-950 text-green-400' : 'bg-yellow-950 text-yellow-400'">
+                {{ m.estado }}
+                </span>
+            </div>
+            }
+        </div>
+
+        </div>
+    </main>
+</div>
