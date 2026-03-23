@@ -1,0 +1,48 @@
+<aside class="w-60 min-w-60 h-full bg-[#141414] border-r border-[#222] flex flex-col p-6">
+    <h1 class="text-2xl font-black tracking-widest text-[#e5ff00] mb-6">FITNESS CLUB</h1>
+
+    <div class="flex items-center gap-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-2 mb-3">
+        <span class="text-[#444] text-sm">⌕</span>
+        <input type="text" placeholder="Buscar miembro..."
+            class="bg-transparent outline-none text-[#aaa] text-xs w-full placeholder-[#444]" />
+    </div>
+
+    <button
+        (click)="abrirModal()"
+        class="w-full bg-[#e5ff00] text-black text-sm font-medium rounded-lg py-2.5 mb-6 hover:opacity-85 transition-opacity">
+        ＋ Añadir miembro
+        </button>
+
+    <p class="text-[10px] text-[#333] tracking-widest mb-2">MENÚ</p>
+    <nav class="flex flex-col gap-0.5">
+        <a routerLink="/home"
+        class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#666] text-sm hover:text-[#aaa] hover:bg-[#1a1a1a]">
+            Inicio
+        </a>
+
+        <a routerLink="/miembros"
+        class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#666] text-sm hover:text-[#aaa] hover:bg-[#1a1a1a]">
+            Miembros
+        </a>
+
+        <a routerLink="/pagos"
+        class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#666] text-sm hover:text-[#aaa] hover:bg-[#1a1a1a]">
+            Pagos
+        </a>
+
+        <a routerLink="/estadisticas"
+        class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#666] text-sm hover:text-[#aaa] hover:bg-[#1a1a1a]">
+            Estadísticas
+        </a>
+    </nav>
+
+    <div class="mt-auto pt-4 border-t border-[#1e1e1e]">
+        <div class="flex items-center gap-2.5 p-2">
+            <div class="w-8 h-8 rounded-full bg-[#e5ff00] flex items-center justify-center text-xs font-medium text-black">AD</div>
+            <div>
+                <p class="text-sm text-[#aaa]">Admin</p>
+                <span class="text-[11px] text-[#444]">Administrador</span>
+            </div>
+        </div>
+    </div>
+</aside>

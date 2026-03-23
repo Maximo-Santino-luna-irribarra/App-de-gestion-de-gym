@@ -12,11 +12,6 @@
             <input [(ngModel)]="form.nombre" name="nombre" type="text" placeholder="Juan"
                 class="w-full bg-[#111] border border-[#333] rounded-lg px-4 py-2.5 text-sm text-zinc-100 outline-none focus:border-[#e5ff00] transition-colors"/>
             </div>
-            <div>
-            <label class="block text-xs text-zinc-500 tracking-widest mb-2">APELLIDO</label>
-            <input [(ngModel)]="form.apellido" name="apellido" type="text" placeholder="Pérez"
-                class="w-full bg-[#111] border border-[#333] rounded-lg px-4 py-2.5 text-sm text-zinc-100 outline-none focus:border-[#e5ff00] transition-colors"/>
-            </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3 mb-4">
@@ -35,11 +30,18 @@
         <div class="mb-4">
             <label class="block text-xs text-zinc-500 tracking-widest mb-2">EMAIL</label>
             <input [(ngModel)]="form.email" name="email" type="email" placeholder="juan@email.com"
-            class="w-full bg-[#111] border border-[#333] rounded-lg px-4 py-2.5 text-sm text-zinc-100 outline-none focus:border-[#e5ff00] transition-colors"/>
+                class="w-full bg-[#111] border border-[#333] rounded-lg px-4 py-2.5 text-sm text-zinc-100 outline-none focus:border-[#e5ff00] transition-colors"/>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-xs text-zinc-500 tracking-widest mb-2">PASSWORD</label>
+            <input [(ngModel)]="form.password" name="password" type="password" placeholder="********"
+                class="w-full bg-[#111] border border-[#333] rounded-lg px-4 py-2.5 text-sm text-zinc-100 outline-none focus:border-[#e5ff00] transition-colors"/>
         </div>
 
         <button type="submit"
             class="w-full bg-[#e5ff00] text-black font-medium rounded-lg py-3 text-sm hover:opacity-85 transition-opacity">
+
             Registrar miembro
         </button>
 

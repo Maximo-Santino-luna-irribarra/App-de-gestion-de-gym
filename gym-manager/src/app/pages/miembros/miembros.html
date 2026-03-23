@@ -1,0 +1,124 @@
+<div class="flex h-screen bg-[#0f0f0f]">
+
+ 
+
+  <!-- MAIN -->
+  <main class="flex-1 overflow-hidden flex flex-col p-5">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg text-[#f0f0f0] font-medium">
+        Miembros
+        <span class="text-xs text-[#444] font-normal">— {{ miembros.length }} en total</span>
+      </h2>
+      @if (error) {
+        <p class="text-xs text-red-400">{{ error }}</p>
+      }
+    </div>
+
+    <!-- Filtros -->
+    <div class="flex gap-2 mb-4">
+      <div class="flex items-center gap-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-2 flex-1">
+        <span class="text-[#444] text-sm">⌕</span>
+        <input
+          [(ngModel)]="busqueda"
+          placeholder="Buscar por nombre o DNI..."
+          class="bg-transparent outline-none text-[#ccc] text-xs w-full placeholder-[#444]" />
+      </div>
+      <select [(ngModel)]="filtroEstado"
+        class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-2 text-[#aaa] text-xs outline-none cursor-pointer">
+        <option value="">Todos los estados</option>
+        <option value="activo">Activo</option>
+        <option value="vencido">Vencido</option>
+      </select>
+      <select [(ngModel)]="filtroPlan"
+        class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-2 text-[#aaa] text-xs outline-none cursor-pointer">
+        <option value="">Todos los planes</option>
+        <option value="Mensual">Mensual</option>
+        <option value="Trimestral">Trimestral</option>
+        <option value="Anual">Anual</option>
+      </select>
+    </div>
+
+    <!-- Tabla -->
+    <div class="flex-1 overflow-auto bg-[#1a1a1a] border border-[#222] rounded-xl">
+      @if (loading) {
+        <p class="text-center text-[#444] text-xs py-10">Cargando miembros...</p>
+      } @else {
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-[#222]">
+              <th class="text-left text-[10px] text-[#444] tracking-widest px-4 py-3 font-normal">NOMBRE</th>
+              <th class="text-left text-[10px] text-[#444] tracking-widest px-4 py-3 font-normal">DNI</th>
+              <th class="text-left text-[10px] text-[#444] tracking-widest px-4 py-3 font-normal">TELÉFONO</th>
+              <th class="text-left text-[10px] text-[#444] tracking-widest px-4 py-3 font-normal">PLAN</th>
+              <th class="text-left text-[10px] text-[#444] tracking-widest px-4 py-3 font-normal">VENCIMIENTO</th>
+              <th class="text-left text-[10px] text-[#444] tracking-widest px-4 py-3 font-normal">ASISTENCIAS</th>
+              <th class="text-left text-[10px] text-[#444] tracking-widest px-4 py-3 font-normal">ESTADO</th>
+              <th class="text-left text-[10px] text-[#444] tracking-widest px-4 py-3 font-normal">ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (m of miembrosFiltrados; track m.id) {
+              <tr class="border-b border-[#1e1e1e] hover:bg-[#161616] transition-colors">
+                <td class="px-4 py-3 text-xs text-[#e8e8e8] font-medium">{{ m.nombre }} {{ m.apellido }}</td>
+                <td class="px-4 py-3 text-xs text-[#bbb]">{{ m.dni }}</td>
+                <td class="px-4 py-3 text-xs text-[#bbb]">{{ m.telefono ?? '—' }}</td>
+                <td class="px-4 py-3">
+                  <span class="text-[10px] px-2 py-1 rounded-full bg-[#1a1a2e] text-indigo-400 border border-indigo-900">
+                    {{ m.plan }}
+                  </span>
+                </td>
+                <td class="px-4 py-3 text-xs text-[#bbb]">{{ m.fecha_vencimiento }}</td>
+                <td class="px-4 py-3 text-xs text-[#bbb]">{{ m.cant_asistencias ?? 0 }}</td>
+                <td class="px-4 py-3">
+                  <span class="text-[10px] px-2 py-1 rounded-full border"
+                    [class]="m.estado
+                      ? 'bg-green-950 text-green-400 border-green-900'
+                      : 'bg-red-950 text-red-400 border-red-900'">
+                    {{ m.estado ? 'Activo' : 'Vencido' }}
+                  </span>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="flex gap-1">
+                    <button class="border border-[#2a2a2a] rounded px-2 py-1 text-[10px] text-[#666] hover:text-[#ccc] bg-transparent cursor-pointer">
+                      Ver
+                    </button>
+                    <button class="border border-[#2a2a2a] rounded px-2 py-1 text-[10px] text-[#666] hover:text-[#ccc] bg-transparent cursor-pointer">
+                      Editar
+                    </button>
+                    <button class="border border-[#3a3a00] rounded px-2 py-1 text-[10px] text-[#e5ff00] hover:bg-[#1a1a00] bg-transparent cursor-pointer">
+                      Renovar
+                    </button>
+                    <button (click)="registrarAsistencia(m)"
+                      class="border border-green-900 rounded px-2 py-1 text-[10px] text-green-400 hover:bg-green-950 bg-transparent cursor-pointer">
+                      +Asist.
+                    </button>
+                    <button (click)="eliminar(m)"
+                      class="border border-[#3a1010] rounded px-2 py-1 text-[10px] text-red-400 hover:bg-[#1a0808] bg-transparent cursor-pointer">
+                      Eliminar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="8" class="text-center text-[#444] text-xs py-10">
+                  No se encontraron miembros
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+
+    <!-- Footer -->
+    <div class="flex items-center justify-between mt-3">
+      <span class="text-[11px] text-[#444]">
+        Mostrando {{ miembrosFiltrados.length }} de {{ miembros.length }} miembros
+      </span>
+    </div>
+
+  </main>
+</div>

@@ -1,0 +1,12 @@
+<div class="flex h-full bg-[#0f0f0f] font-sans">
+    
+    <app-sidebar (abrirModalEvent)="abrirModal()"></app-sidebar>
+
+    <main class="flex-1 overflow-y-auto p-6">
+        <router-outlet></router-outlet>
+    </main>
+
+    @if (modalAbierto) {
+        <app-modal-miembro (cerrar)="cerrarModal()"></app-modal-miembro>
+    }
+</div>

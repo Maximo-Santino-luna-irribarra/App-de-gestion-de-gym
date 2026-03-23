@@ -1,0 +1,147 @@
+<!-- Overlay -->
+<div class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+    (click)="cerrar.emit()">
+
+    <!-- Modal — stopPropagation para que no cierre al clickear adentro -->
+    <div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl w-full max-w-lg p-6"
+        (click)="$event.stopPropagation()">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-5">
+        <div>
+            <h3 class="text-sm text-[#f0f0f0] font-medium">Nuevo miembro</h3>
+            <p class="text-[11px] text-[#444] mt-0.5">Completá todos los campos obligatorios</p>
+        </div>
+        <button (click)="cerrar.emit()"
+            class="text-[#444] hover:text-[#aaa] text-xl bg-transparent border-none cursor-pointer leading-none">
+            ✕
+        </button>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="guardar()">
+
+        <!-- Nombre y Apellido -->
+        <div class="grid grid-cols-2 gap-3 mb-3">
+            <div>
+            <label class="block text-[10px] text-[#555] tracking-widest mb-1.5">NOMBRE *</label>
+            <input formControlName="nombre" placeholder="Juan"
+                class="w-full bg-[#111] border rounded-lg px-3 py-2 text-xs text-zinc-100 outline-none transition-colors"
+                [class]="tieneError('nombre')
+                ? 'border-red-800 focus:border-red-500'
+                : 'border-[#333] focus:border-[#e5ff00]'" />
+            @if (tieneError('nombre')) {
+                <p class="text-[10px] text-red-400 mt-1">Requerido</p>
+            }
+            </div>
+            <div>
+            <label class="block text-[10px] text-[#555] tracking-widest mb-1.5">APELLIDO *</label>
+            <input formControlName="apellido" placeholder="Pérez"
+                class="w-full bg-[#111] border rounded-lg px-3 py-2 text-xs text-zinc-100 outline-none transition-colors"
+                [class]="tieneError('apellido')
+                ? 'border-red-800 focus:border-red-500'
+                : 'border-[#333] focus:border-[#e5ff00]'" />
+            @if (tieneError('apellido')) {
+                <p class="text-[10px] text-red-400 mt-1">Requerido</p>
+            }
+            </div>
+        </div>
+
+        <!-- DNI y Teléfono -->
+        <div class="grid grid-cols-2 gap-3 mb-3">
+            <div>
+            <label class="block text-[10px] text-[#555] tracking-widest mb-1.5">DNI *</label>
+            <input formControlName="dni" placeholder="12345678"
+                class="w-full bg-[#111] border rounded-lg px-3 py-2 text-xs text-zinc-100 outline-none transition-colors"
+                [class]="tieneError('dni')
+                ? 'border-red-800 focus:border-red-500'
+                : 'border-[#333] focus:border-[#e5ff00]'" />
+            @if (tieneError('dni')) {
+                <p class="text-[10px] text-red-400 mt-1">Requerido</p>
+            }
+            </div>
+            <div>
+            <label class="block text-[10px] text-[#555] tracking-widest mb-1.5">TELÉFONO</label>
+            <input formControlName="telefono" placeholder="11 1234-5678"
+                class="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-xs text-zinc-100 outline-none focus:border-[#e5ff00] transition-colors" />
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+            <label class="block text-[10px] text-[#555] tracking-widest mb-1.5">EMAIL</label>
+            <input formControlName="email" type="email" placeholder="juan@email.com"
+            class="w-full bg-[#111] border rounded-lg px-3 py-2 text-xs text-zinc-100 outline-none transition-colors"
+            [class]="tieneError('email')
+                ? 'border-red-800 focus:border-red-500'
+                : 'border-[#333] focus:border-[#e5ff00]'" />
+            @if (tieneError('email')) {
+            <p class="text-[10px] text-red-400 mt-1">Email inválido</p>
+            }
+        </div>
+
+        <!-- Fecha nacimiento y Plan -->
+        <div class="grid grid-cols-2 gap-3 mb-3">
+            <div>
+            <label class="block text-[10px] text-[#555] tracking-widest mb-1.5">FECHA NACIMIENTO</label>
+            <input formControlName="fecha_nacimiento" type="date"
+                class="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-xs text-zinc-100 outline-none focus:border-[#e5ff00] transition-colors" />
+            </div>
+            <div>
+            <label class="block text-[10px] text-[#555] tracking-widest mb-1.5">PLAN *</label>
+            <select formControlName="plan" (change)="onPlanChange()"
+                class="w-full bg-[#111] border border-[#333] rounded-lg px-3 py-2 text-xs text-zinc-100 outline-none focus:border-[#e5ff00] transition-colors cursor-pointer">
+                <option value="Mensual">Mensual (30 días)</option>
+                <option value="Trimestral">Trimestral (90 días)</option>
+                <option value="Anual">Anual (365 días)</option>
+            </select>
+            </div>
+        </div>
+
+        <!-- Fecha vencimiento -->
+        <div class="mb-4">
+            <label class="block text-[10px] text-[#555] tracking-widest mb-1.5">FECHA VENCIMIENTO *</label>
+            <input formControlName="fecha_vencimiento" type="date"
+            class="w-full bg-[#111] border rounded-lg px-3 py-2 text-xs text-zinc-100 outline-none transition-colors"
+            [class]="tieneError('fecha_vencimiento')
+                ? 'border-red-800 focus:border-red-500'
+                : 'border-[#333] focus:border-[#e5ff00]'" />
+            <p class="text-[10px] text-[#444] mt-1">Se calcula automáticamente al elegir el plan</p>
+            @if (tieneError('fecha_vencimiento')) {
+            <p class="text-[10px] text-red-400 mt-1">Requerido</p>
+            }
+        </div>
+
+        <!-- Toggles -->
+        <div class="flex gap-6 mb-5">
+            <label class="flex items-center gap-2 cursor-pointer">
+            <input formControlName="estado" type="checkbox"
+                class="w-3.5 h-3.5 accent-[#e5ff00]" />
+            <span class="text-xs text-[#666]">Activo</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+            <input formControlName="pago_al_dia" type="checkbox"
+                class="w-3.5 h-3.5 accent-[#e5ff00]" />
+            <span class="text-xs text-[#666]">Pago al día</span>
+            </label>
+        </div>
+
+        <!-- Error general -->
+        @if (error) {
+            <p class="text-xs text-red-400 mb-3 text-center">{{ error }}</p>
+        }
+
+        <!-- Footer -->
+        <div class="flex gap-2 justify-end pt-3 border-t border-[#222]">
+            <button type="button" (click)="cerrar.emit()"
+            class="bg-[#222] text-[#666] border-none rounded-lg px-5 py-2 text-xs cursor-pointer hover:bg-[#2a2a2a] transition-colors">
+            Cancelar
+            </button>
+            <button type="submit" [disabled]="loading"
+            class="bg-[#e5ff00] text-black border-none rounded-lg px-5 py-2 text-xs font-medium cursor-pointer hover:opacity-85 transition-opacity disabled:opacity-50">
+            {{ loading ? 'Guardando...' : 'Guardar miembro' }}
+            </button>
+        </div>
+
+        </form>
+    </div>
+</div>

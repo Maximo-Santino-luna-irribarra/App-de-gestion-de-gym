@@ -1,0 +1,71 @@
+import { ModalMiembro } from './../modal-miembros/modal-miembros';
+import { MiembrosService,Miembro } from './../../../shared/service/miembro.service';
+import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-miembros',
+  standalone: true,
+  imports: [RouterLink, FormsModule, ModalMiembro],
+  templateUrl: './miembros.html',
+})
+export class Miembros implements OnInit {
+
+  miembros: Miembro[] = [];
+  loading = false;
+  error = '';
+  modalAbierto = false; 
+  busqueda = '';
+  filtroEstado = '';
+  filtroPlan = '';
+
+  constructor(private miembrosService: MiembrosService) {}
+
+  async ngOnInit() {
+    await this.cargarMiembros();
+  }
+
+  async cargarMiembros() {
+    this.loading = true;
+    try {
+      this.miembros = await this.miembrosService.getAll();
+    } catch (e: any) {
+      this.error = e.message;
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  get miembrosFiltrados() {
+    return this.miembros.filter(m => {
+      const matchBusqueda = !this.busqueda ||
+        `${m.nombre} ${m.apellido}`.toLowerCase().includes(this.busqueda.toLowerCase()) ||
+        m.dni.includes(this.busqueda);
+      const matchEstado = !this.filtroEstado ||
+        (this.filtroEstado === 'activo' ? m.estado === true : m.estado === false);
+      const matchPlan = !this.filtroPlan || m.plan === this.filtroPlan;
+      return matchBusqueda && matchEstado && matchPlan;
+    });
+  }
+
+  async registrarAsistencia(m: Miembro) {
+    if (!m.id) return;
+    try {
+      await this.miembrosService.registrarAsistencia(m.id, m.cant_asistencias ?? 0);
+      await this.cargarMiembros();
+    } catch (e: any) {
+      this.error = e.message;
+    }
+  }
+
+  async eliminar(m: Miembro) {
+    if (!m.id || !confirm(`¿Eliminar a ${m.nombre} ${m.apellido}?`)) return;
+    try {
+      await this.miembrosService.eliminar(m.id);
+      await this.cargarMiembros();
+    } catch (e: any) {
+      this.error = e.message;
+    }
+  }
+}
