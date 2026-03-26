@@ -3,11 +3,11 @@ import { MiembrosService,Miembro } from './../../../shared/service/miembro.servi
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
+import { ModalRenovar } from '../modal-renovar/modal-renovar';
 @Component({
   selector: 'app-miembros',
   standalone: true,
-  imports: [RouterLink, FormsModule, ModalMiembro],
+  imports: [FormsModule,ModalRenovar  ],
   templateUrl: './miembros.html',
 })
 export class Miembros implements OnInit {
@@ -19,7 +19,9 @@ export class Miembros implements OnInit {
   busqueda = '';
   filtroEstado = '';
   filtroPlan = '';
-
+  modalRenovarAbierto = false
+  miembroSeleccionado:any
+  
   constructor(private miembrosService: MiembrosService) {}
 
   async ngOnInit() {
@@ -67,5 +69,14 @@ export class Miembros implements OnInit {
     } catch (e: any) {
       this.error = e.message;
     }
+  }
+
+  abrirModal(miembro: any) {
+    this.miembroSeleccionado = miembro;
+    this.modalRenovarAbierto = true;
+  }
+
+  cerrarModal() {
+    this.modalRenovarAbierto = false;
   }
 }

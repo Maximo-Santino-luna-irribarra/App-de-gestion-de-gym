@@ -350,31 +350,31 @@ export interface Miembro {
         if (error) throw error;
     }
 
-    async renovar(id: string, plan: string, diasDuracion: number) {
-        if (!id?.trim()) {
-        throw new Error('El id es obligatorio.');
-        }
+async renovar(id: string, plan: string, diasDuracion: number) {
+    
+    // Traemos el miembro para saber su vencimiento actual
+    const miembro = await this.getById(id);
+    
+    // Si está vencido, sumamos desde HOY
+    // Si está activo, sumamos desde el VENCIMIENTO ACTUAL
+    const hoy = new Date();
+    const vencimientoActual = new Date(miembro.fecha_vencimiento);
+    
+    const base = vencimientoActual > hoy ? vencimientoActual : hoy;
+    
+    const nuevoVencimiento = new Date(base);
+    nuevoVencimiento.setDate(nuevoVencimiento.getDate() + diasDuracion);
 
-        const planNormalizado = plan?.trim().toLowerCase();
-        this.validarPlan(planNormalizado);
-
-        if (!Number.isInteger(diasDuracion) || diasDuracion <= 0) {
-        throw new Error('La duración del plan debe ser un número entero mayor a 0.');
-        }
-
-        const hoy = new Date();
-        const vencimiento = new Date(hoy);
-        vencimiento.setDate(vencimiento.getDate() + diasDuracion);
-
-        return this.editar(id, {
-        plan: planNormalizado,
-        fecha_vencimiento: vencimiento.toISOString().split('T')[0],
+    return this.editar(id, {
+        plan,
+        fecha_vencimiento: nuevoVencimiento.toISOString().split('T')[0],
         estado: true,
         pago_al_dia: true,
-        });
+    });
     }
 
-    async registrarAsistencia(id: string, asistenciasActuales: number) {
+
+async registrarAsistencia(id: string, asistenciasActuales: number) {
         if (!id?.trim()) {
         throw new Error('El id es obligatorio.');
         }

@@ -1,0 +1,88 @@
+<!-- Overlay -->
+<div class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
+    <!-- Modal -->
+    <div class="w-[420px] bg-[#1a1a1a] border border-[#222] rounded-xl p-5">
+
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-4">
+        <h3 class="text-sm text-[#f0f0f0]">Renovar membresía</h3>
+        <button (click)="cerrar.emit()" class="text-[#555] hover:text-white">✕</button>
+        </div>
+
+        <p class="text-xs text-[#555] mb-4">
+        {{ miembroNombre }}
+        </p>
+
+        <form [formGroup]="form" class="space-y-3">
+
+        <!-- Plan -->
+        <div>
+            <label class="text-[11px] text-[#555]">PLAN</label>
+            <select formControlName="plan"
+            class="w-full mt-1 bg-[#0f0f0f] border border-[#222] rounded-lg p-2 text-sm text-white">
+            <option value="mensual">Mensual</option>
+            <option value="trimestral">Trimestral</option>
+            <option value="anual">Anual</option>
+            </select>
+        </div>
+
+        <!-- Monto -->
+        <div>
+            <label class="text-[11px] text-[#555]">MONTO</label>
+            <input type="number" formControlName="monto"
+            class="w-full mt-1 bg-[#0f0f0f] border border-[#222] rounded-lg p-2 text-sm text-white">
+        </div>
+
+        <!-- Método -->
+        <div>
+            <label class="text-[11px] text-[#555]">MÉTODO</label>
+            <select formControlName="metodo_pago"
+            class="w-full mt-1 bg-[#0f0f0f] border border-[#222] rounded-lg p-2 text-sm text-white">
+            <option value="efectivo">Efectivo</option>
+            <option value="transferencia">Transferencia</option>
+            <option value="tarjeta">Tarjeta</option>
+            </select>
+        </div>
+
+        <!-- Fechas -->
+        <div class="grid grid-cols-2 gap-2">
+            <div>
+            <label class="text-[11px] text-[#555]">DESDE</label>
+            <input type="date" formControlName="fecha_desde"
+                class="w-full mt-1 bg-[#0f0f0f] border border-[#222] rounded-lg p-2 text-sm text-white">
+            </div>
+
+            <div>
+            <label class="text-[11px] text-[#555]">HASTA</label>
+            <input type="date" formControlName="fecha_hasta"
+                class="w-full mt-1 bg-[#0f0f0f] border border-[#222] rounded-lg p-2 text-sm text-white">
+            </div>
+        </div>
+
+        <!-- Observaciones -->
+        <div>
+            <label class="text-[11px] text-[#555]">OBS</label>
+            <input type="text" formControlName="observaciones"
+            class="w-full mt-1 bg-[#0f0f0f] border border-[#222] rounded-lg p-2 text-sm text-white">
+        </div>
+
+        <!-- Botones -->
+        <div class="flex justify-end gap-2 pt-2">
+            <button type="button"
+            (click)="cerrar.emit()"
+            class="px-3 py-1 text-xs bg-[#222] rounded-lg text-[#aaa] hover:text-white">
+            Cancelar
+            </button>
+
+            <button type="button"
+            (click)="guardar()"
+            [disabled]="loading"
+            class="px-3 py-1 text-xs bg-[#e5ff00] text-black rounded-lg font-medium">
+            {{ loading ? 'Guardando...' : 'Confirmar' }}
+            </button>
+        </div>
+
+        </form>
+    </div>
+</div>

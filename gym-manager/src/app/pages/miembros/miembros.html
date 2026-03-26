@@ -87,13 +87,10 @@
                     <button class="border border-[#2a2a2a] rounded px-2 py-1 text-[10px] text-[#666] hover:text-[#ccc] bg-transparent cursor-pointer">
                       Editar
                     </button>
-                    <button class="border border-[#3a3a00] rounded px-2 py-1 text-[10px] text-[#e5ff00] hover:bg-[#1a1a00] bg-transparent cursor-pointer">
+                    <button (click)="abrirModal(m)"  class="border border-[#3a3a00] rounded px-2 py-1 text-[10px] text-[#e5ff00] hover:bg-[#1a1a00] bg-transparent cursor-pointer">
                       Renovar
                     </button>
-                    <button (click)="registrarAsistencia(m)"
-                      class="border border-green-900 rounded px-2 py-1 text-[10px] text-green-400 hover:bg-green-950 bg-transparent cursor-pointer">
-                      +Asist.
-                    </button>
+                    
                     <button (click)="eliminar(m)"
                       class="border border-[#3a1010] rounded px-2 py-1 text-[10px] text-red-400 hover:bg-[#1a0808] bg-transparent cursor-pointer">
                       Eliminar
@@ -112,7 +109,15 @@
         </table>
       }
     </div>
-
+     <!--  @if (modalRenovarAbierto) {
+        <app-modal-renovar
+          [miembroId]="miembroSeleccionado.id"
+          [miembroNombre]="miembroSeleccionado.nombre + ' ' + miembroSeleccionado.apellido"
+          [usuarioId]="user.id"
+          (cerrar)="cerrarModal()"
+          (renovado)="refrescarDatos()">
+        </app-modal-renovar>
+      } -->
     <!-- Footer -->
     <div class="flex items-center justify-between mt-3">
       <span class="text-[11px] text-[#444]">
