@@ -1,3 +1,4 @@
+import { ToastService } from './../../../shared/service/modal.services';
 import { Miembro, MiembrosService } from './../../../shared/service/miembro.service';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -15,11 +16,11 @@ export class ModalMiembro {
 
   form: FormGroup;
   loading = false;
-  error = '';
 
   constructor(
     private fb: FormBuilder,
-    private miembrosService: MiembrosService
+    private miembrosService: MiembrosService,
+    private toast: ToastService
   ) {
     this.form = this.fb.group({
       nombre:            ['', Validators.required],
@@ -35,12 +36,13 @@ export class ModalMiembro {
     });
   }
 
-  // Calcula el vencimiento automáticamente según el plan
   onPlanChange() {
     const plan = this.form.get('plan')?.value;
     const dias = plan === 'Mensual' ? 30 : plan === 'Trimestral' ? 90 : 365;
+
     const fecha = new Date();
     fecha.setDate(fecha.getDate() + dias);
+
     this.form.patchValue({
       fecha_vencimiento: fecha.toISOString().split('T')[0]
     });
@@ -49,24 +51,27 @@ export class ModalMiembro {
   async guardar() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.toast.error('Completá los campos obligatorios');
       return;
     }
 
     this.loading = true;
-    this.error = '';
 
     try {
       const nuevo = await this.miembrosService.crear(this.form.value);
+
+      this.toast.success('Miembro creado correctamente');
+
       this.guardado.emit(nuevo);
       this.cerrar.emit();
+
     } catch (e: any) {
-      this.error = e.message ?? 'Error al guardar';
+      this.toast.error('Error al guardar miembro');
     } finally {
       this.loading = false;
     }
   }
 
-  // Helper para mostrar errores en el template
   tieneError(campo: string): boolean {
     const control = this.form.get(campo);
     return !!(control?.invalid && control?.touched);

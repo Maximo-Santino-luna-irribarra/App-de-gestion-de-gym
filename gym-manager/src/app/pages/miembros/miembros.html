@@ -11,9 +11,6 @@
         Miembros
         <span class="text-xs text-[#444] font-normal">— {{ miembros.length }} en total</span>
       </h2>
-      @if (error) {
-        <p class="text-xs text-red-400">{{ error }}</p>
-      }
     </div>
 
     <!-- Filtros -->
@@ -109,7 +106,7 @@
         </table>
       }
     </div>
-     <!--  @if (modalRenovarAbierto) {
+       @if (modalRenovarAbierto) {
         <app-modal-renovar
           [miembroId]="miembroSeleccionado.id"
           [miembroNombre]="miembroSeleccionado.nombre + ' ' + miembroSeleccionado.apellido"
@@ -117,7 +114,7 @@
           (cerrar)="cerrarModal()"
           (renovado)="refrescarDatos()">
         </app-modal-renovar>
-      } -->
+      } 
     <!-- Footer -->
     <div class="flex items-center justify-between mt-3">
       <span class="text-[11px] text-[#444]">

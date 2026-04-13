@@ -44,25 +44,30 @@
             <option value="tarjeta">Tarjeta</option>
             </select>
         </div>
+                <!-- Fechas -->
+                <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="text-[11px] text-[#555]">DESDE</label>
+                    <input 
+                    type="date" 
+                    formControlName="fecha_desde"
+                    (change)="calcularFecha()"
+                    class="w-full mt-1 bg-[#0f0f0f] border border-[#222] rounded-lg p-2 text-sm text-white">
+                </div>
 
-        <!-- Fechas -->
-        <div class="grid grid-cols-2 gap-2">
-            <div>
-            <label class="text-[11px] text-[#555]">DESDE</label>
-            <input type="date" formControlName="fecha_desde"
-                class="w-full mt-1 bg-[#0f0f0f] border border-[#222] rounded-lg p-2 text-sm text-white">
-            </div>
-
-            <div>
-            <label class="text-[11px] text-[#555]">HASTA</label>
-            <input type="date" formControlName="fecha_hasta"
-                class="w-full mt-1 bg-[#0f0f0f] border border-[#222] rounded-lg p-2 text-sm text-white">
-            </div>
-        </div>
+                <div>
+                    <label class="text-[11px] text-[#555]">HASTA</label>
+                    <input 
+                    type="date"
+                    formControlName="fecha_hasta"
+                    readonly
+                    class="w-full mt-1 bg-[#0f0f0f] border border-[#222] rounded-lg p-2 text-sm text-white opacity-70">
+                </div>
+                </div>
 
         <!-- Observaciones -->
         <div>
-            <label class="text-[11px] text-[#555]">OBS</label>
+            <label class="text-[11px] text-[#555]">Observaciones</label>
             <input type="text" formControlName="observaciones"
             class="w-full mt-1 bg-[#0f0f0f] border border-[#222] rounded-lg p-2 text-sm text-white">
         </div>

@@ -1,0 +1,37 @@
+<div class="fixed bottom-5 right-5 flex flex-col gap-3 z-50">
+
+  @for (toast of toasts; track $index) {
+    <div
+      class="w-[320px] bg-[#1a1a1a] border border-[#222] rounded-xl p-4 shadow-lg flex justify-between items-start">
+
+      <!-- Contenido -->
+      <div class="flex flex-col gap-1">
+
+        <!-- Tipo -->
+        <span class="text-[11px] uppercase tracking-wide"
+          [ngClass]="{
+            'text-green-400': toast.type === 'success',
+            'text-red-400': toast.type === 'error',
+            'text-blue-400': toast.type === 'info'
+          }">
+          {{ toast.type }}
+        </span>
+
+        <!-- Mensaje -->
+        <p class="text-sm text-[#f0f0f0]">
+          {{ toast.message }}
+        </p>
+
+      </div>
+
+      <!-- Botón cerrar -->
+      <button 
+        (click)="remove($index)"
+        class="text-[#555] hover:text-white text-sm">
+        ✕
+      </button>
+
+    </div>
+  }
+
+</div>

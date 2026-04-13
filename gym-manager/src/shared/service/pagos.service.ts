@@ -63,4 +63,15 @@ async registrar(pago: Omit<Pago, 'id' | 'created_at'>) {
     if (error) throw error;
     return data as Pago;
 }
+    async actualizarVencimiento(miembroId: string, fechaHasta: string) {
+    return await this.supabase.client
+        .from('miembros')
+        .update({
+        fecha_vencimiento: fechaHasta,
+        estado: true,
+        pago_al_dia: true
+        })
+        .eq('id', miembroId);
+}
+
 }
