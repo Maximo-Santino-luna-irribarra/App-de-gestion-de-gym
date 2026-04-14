@@ -50,9 +50,6 @@ export class Register {
       try {
         this.loading = true;
 
-        console.log(this.form);
-
-
         await this.auth.register(this.form)
         this.resetForm();
         this.router.navigate(['/login']); // redirige después de registrar

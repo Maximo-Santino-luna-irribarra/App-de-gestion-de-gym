@@ -34,4 +34,11 @@ export class Login {
         this.loading = false;
       }
     }
+    async accesoRapido() {
+      this.email = 'qwerty@gmail.com';
+      this.password = 'qwerty';
+
+      await this.onLogin();
+    }
+    
 }

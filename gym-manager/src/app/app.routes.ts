@@ -1,8 +1,10 @@
+import { AuthGuard } from './guards/auth-guard';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
 
+    // 🔓 Públicas
     {
         path: 'login',
         loadComponent: () =>
@@ -14,8 +16,10 @@ export const routes: Routes = [
         import('./auth/register/register').then(m => m.Register)
     },
 
+    // 🔒 Protegidas
     {
         path: '',
+        canActivate: [AuthGuard],
         loadComponent: () =>
         import('./layout/main-layout/main-layout').then(m => m.MainLayout),
         children: [
@@ -28,7 +32,12 @@ export const routes: Routes = [
             path: 'miembros',
             loadComponent: () =>
             import('./pages/miembros/miembros').then(m => m.Miembros)
+        },
+        {
+            path: 'pagos',
+            loadComponent: () =>
+            import('../app/pages/pagos/pagos').then(m => m.Pagos)
         }
         ]
-    }
+}
 ];

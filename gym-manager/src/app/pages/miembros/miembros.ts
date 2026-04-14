@@ -1,3 +1,4 @@
+import { AuthService } from './../../../shared/service/auth.service';
 import { ToastService } from './../../../shared/service/modal.services';
 import { ModalMiembro } from './../modal-miembros/modal-miembros';
 import { MiembrosService, Miembro } from './../../../shared/service/miembro.service';
@@ -5,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalRenovar } from '../modal-renovar/modal-renovar';
 import { ChangeDetectorRef } from '@angular/core';
+import { SupabaseService } from '../../../shared/service/supabase.service';
 @Component({
   selector: 'app-miembros',
   standalone: true,
@@ -26,12 +28,18 @@ export class Miembros implements OnInit {
   constructor(
     private miembrosService: MiembrosService,
     private toast: ToastService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private supabaseservice :SupabaseService,
+    private auth: AuthService
   ) {}
 
   async ngOnInit() {
-    console.log("asdsasdsad")
-  
+    const session = await this.auth.getSession();
+
+    if (session?.user) {
+      this.user = session.user;
+    }
+
     await this.cargarMiembros();
     this.cd.detectChanges();
   }
@@ -40,7 +48,7 @@ export class Miembros implements OnInit {
     this.loading = true;
     try {
       this.miembros = await this.miembrosService.getAll();
-     
+    
     } catch (e: any) {
       this.toast.error('Error al cargar miembros');
     } finally {

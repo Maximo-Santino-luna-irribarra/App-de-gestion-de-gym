@@ -25,8 +25,11 @@ export class PagosService {
 
     constructor(private supabase: SupabaseService) {}
 
-  // Traer todos con datos del miembro y usuario
-    async getAll() {
+  // Traer todos con joins y orden configurable
+    async getAll(
+        orderBy: 'created_at' | 'fecha_pago' | 'fecha_desde' | 'fecha_hasta' = 'created_at',
+        ascending: boolean = false
+    ) {
         const { data, error } = await this.supabase.client
         .from('pagos')
         .select(`
@@ -34,44 +37,115 @@ export class PagosService {
             miembros ( nombre, apellido, dni ),
             users ( nombre )
         `)
-        .order('created_at', { ascending: false });
+        .order(orderBy, { ascending });
 
         if (error) throw error;
         return data as Pago[];
     }
 
-  // Pagos de un miembro específico
-async getByMiembro(miembroId: string) {
-    const { data, error } = await this.supabase.client
+    // Traer un pago por id
+    async getById(id: string) {
+        const { data, error } = await this.supabase.client
         .from('pagos')
-        .select(`*, users ( nombre )`)
+        .select(`
+            *,
+            miembros ( nombre, apellido, dni ),
+            users ( nombre )
+        `)
+        .eq('id', id)
+        .single();
+
+        if (error) throw error;
+        return data as Pago;
+    }
+
+    // Pagos de un miembro específico
+    async getByMiembro(
+        miembroId: string,
+        orderBy: 'created_at' | 'fecha_pago' | 'fecha_desde' | 'fecha_hasta' = 'created_at',
+        ascending: boolean = false
+    ) {
+        const { data, error } = await this.supabase.client
+        .from('pagos')
+        .select(`
+            *,
+            users ( nombre )
+        `)
         .eq('miembro_id', miembroId)
-        .order('created_at', { ascending: false });
+        .order(orderBy, { ascending });
 
-    if (error) throw error;
-    return data as Pago[];
-}
+        if (error) throw error;
+        return data as Pago[];
+    }
 
-  // Registrar pago — el trigger renueva la membresía automáticamente
-async registrar(pago: Omit<Pago, 'id' | 'created_at'>) {
-    const { data, error } = await this.supabase.client
+    // Registrar pago
+    async registrar(pago: Omit<Pago, 'id' | 'created_at' | 'miembros' | 'users'>) {
+        const { data, error } = await this.supabase.client
         .from('pagos')
         .insert(pago)
         .select()
         .single();
 
-    if (error) throw error;
-    return data as Pago;
-}
+        if (error) throw error;
+        return data as Pago;
+    }
+
+    // Editar pago
+    async actualizar(id: string, pago: Partial<Omit<Pago, 'id' | 'created_at' | 'miembros' | 'users'>>) {
+        const { data, error } = await this.supabase.client
+        .from('pagos')
+        .update(pago)
+        .eq('id', id)
+        .select()
+        .single();
+
+        if (error) throw error;
+        return data as Pago;
+    }
+
+    // Eliminar pago
+    async eliminar(id: string) {
+        const { error } = await this.supabase.client
+        .from('pagos')
+        .delete()
+        .eq('id', id);
+
+        if (error) throw error;
+        return true;
+    }
+
+    // Filtrar por rango de fechas de pago
+    async getByRangoFechas(
+        desde: string,
+        hasta: string,
+        orderBy: 'fecha_pago' | 'created_at' = 'fecha_pago',
+        ascending: boolean = false
+    ) {
+        const { data, error } = await this.supabase.client
+        .from('pagos')
+        .select(`
+            *,
+            miembros ( nombre, apellido, dni ),
+            users ( nombre )
+        `)
+        .gte('fecha_pago', desde)
+        .lte('fecha_pago', hasta)
+        .order(orderBy, { ascending });
+
+        if (error) throw error;
+        return data as Pago[];
+    }
+
+    // Esto ya lo tenías
     async actualizarVencimiento(miembroId: string, fechaHasta: string) {
-    return await this.supabase.client
+        return await this.supabase.client
         .from('miembros')
         .update({
-        fecha_vencimiento: fechaHasta,
-        estado: true,
-        pago_al_dia: true
+            fecha_vencimiento: fechaHasta,
+            estado: true,
+            pago_al_dia: true
         })
         .eq('id', miembroId);
-}
+    }
 
 }

@@ -33,66 +33,69 @@ export interface RegisterData {
 
     // Register
     async register(registerData: RegisterData) {
-    const { email, password, nombre, dni, telefono, roles } = registerData;
+        const { email, password, nombre, dni, telefono, roles } = registerData;
 
-    // VALIDACIONES
-    if (!email || !email.includes('@')) {
-        console.log('❌ Email inválido');
-        throw new Error('Email inválido');
-    }
-
-    if (!password || password.length < 6) {
-        console.log('❌ Password muy corto (mínimo 6)');
-        throw new Error('Password inválido');
-    }
-
-    if (!nombre || nombre.trim().length < 2) {
-        console.log('❌ Nombre inválido');
-        throw new Error('Nombre inválido');
-    }
-
-    if (!dni || dni.length < 7) {
-        console.log('❌ DNI inválido');
-        throw new Error('DNI inválido');
-    }
-
-    if (telefono && telefono.length < 8) {
-        console.log('❌ Teléfono inválido');
-        throw new Error('Teléfono inválido');
-    }
-
-    console.log('✅ Datos validados correctamente');
-
-    // 1. Crear usuario
-    const { data, error } = await this.supabase.client.auth.signUp({
-        email,
-        password,
-        options: {
-        data: { nombre }
+        if (!email || !email.includes('@')) {
+            console.log('❌ Email inválido');
+            throw new Error('Email inválido');
         }
-    });
 
-    if (error) {
-        console.log('❌ Error en auth:', error.message);
-        throw error;
-    }
-
-    // 2. Insert/update en tabla users
-    if (data.user) {
-        const { error: profileError } = await this.supabase.client
-        .from('users')
-        .update({ nombre, dni, telefono, roles: roles ?? 'staff' })
-        .eq('id', data.user.id);
-
-        if (profileError) {
-        console.log('❌ Error guardando perfil:', profileError.message);
-        throw profileError;
+        if (!password || password.length < 6) {
+            console.log('❌ Password muy corto (mínimo 6)');
+            throw new Error('Password inválido');
         }
-    }
 
-    console.log('🚀 Usuario registrado correctamente');
-    return data;
-    }
+        if (!nombre || nombre.trim().length < 2) {
+            console.log('❌ Nombre inválido');
+            throw new Error('Nombre inválido');
+        }
+
+        if (!dni || dni.length < 7) {
+            console.log('❌ DNI inválido');
+            throw new Error('DNI inválido');
+        }
+
+        if (telefono && telefono.length < 8) {
+            console.log('❌ Teléfono inválido');
+            throw new Error('Teléfono inválido');
+        }
+
+        console.log('✅ Datos validados correctamente');
+
+        const { data, error } = await this.supabase.client.auth.signUp({
+            email,
+            password,
+            options: {
+            data: { nombre }
+            }
+        });
+
+        if (error) {
+            console.log('❌ Error en auth:', error.message);
+            throw error;
+        }
+
+        if (data.user) {
+            const { error: profileError } = await this.supabase.client
+            .from('users')
+            .upsert({
+                id: data.user.id,
+                nombre,
+                email: data.user.email,
+                dni,
+                telefono,
+                roles: roles ?? 'staff'
+            });
+
+            if (profileError) {
+            console.log('❌ Error guardando perfil:', profileError.message);
+            throw profileError;
+            }
+        }
+
+        console.log('🚀 Usuario registrado correctamente');
+        return data;
+        }
 
     // Logout
     async logout() {
@@ -126,4 +129,8 @@ export interface RegisterData {
         callback(session);
         });
     }
+    async getSession() {
+        const { data: { session } } = await this.supabase.client.auth.getSession();
+        return session;
+        }
 }
