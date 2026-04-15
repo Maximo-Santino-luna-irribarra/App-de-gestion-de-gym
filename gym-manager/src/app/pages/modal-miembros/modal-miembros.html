@@ -1,6 +1,5 @@
 <!-- Overlay -->
-<div class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
-    (click)="cerrar.emit()">
+<div class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
 
     <!-- Modal — stopPropagation para que no cierre al clickear adentro -->
     <div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl w-full max-w-lg p-6"
@@ -12,7 +11,7 @@
             <h3 class="text-sm text-[#f0f0f0] font-medium">Nuevo miembro</h3>
             <p class="text-[11px] text-[#444] mt-0.5">Completá todos los campos obligatorios</p>
         </div>
-        <button (click)="cerrar.emit()"
+        <button (click)="cerrarModal(true)"
             class="text-[#444] hover:text-[#aaa] text-xl bg-transparent border-none cursor-pointer leading-none">
             ✕
         </button>

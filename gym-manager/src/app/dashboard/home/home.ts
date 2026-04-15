@@ -1,6 +1,8 @@
 import { Component,OnInit } from '@angular/core';
 import { MiembrosService } from '../../../shared/service/miembro.service';
 import { PagosService } from '../../../shared/service/pagos.service';
+import { ChangeDetectorRef } from '@angular/core';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.html',
@@ -24,11 +26,13 @@ export class Home implements OnInit {
 
   constructor(
     private miembrosService: MiembrosService,
-    private pagosService: PagosService
+    private pagosService: PagosService,
+    private cd :ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
     await this.cargarDashboard();
+    this.cd.detectChanges()
   }
 
   async cargarDashboard() {

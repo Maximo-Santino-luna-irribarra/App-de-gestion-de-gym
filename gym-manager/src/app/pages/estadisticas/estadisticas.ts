@@ -2,6 +2,7 @@ import { Component,OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MiembrosService, Miembro } from '../../../shared/service/miembro.service';
 import { PagosService, Pago } from '../../../shared/service/pagos.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-estadisticas',
@@ -32,11 +33,13 @@ export class Estadisticas implements OnInit {
 
   constructor(
     private miembrosService: MiembrosService,
-    private pagosService: PagosService
+    private pagosService: PagosService,
+    private cd :ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
     await this.cargarEstadisticas();
+    this.cd.detectChanges()
   }
 
   async cargarEstadisticas() {
